@@ -1,2 +1,6 @@
 #!/bin/bash
-echo "Hello, $NAME! You love coding in $LANGUAGE. Keep it up!"
+
+name="$1"
+language="$2"
+
+echo "Hello, $name! You love coding in $language. Keep it up!"
