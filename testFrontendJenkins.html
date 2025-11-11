@@ -52,6 +52,11 @@
             mix-blend-mode: difference;
         }
 
+        #cursor.clicked {
+            transform: scale(0.8);
+            background: var(--primary);
+        }
+
         /* Animated Background */
         .bg-animation {
             position: fixed;
@@ -76,6 +81,17 @@
             25% { transform: translate(100px, -100px) scale(1.2); }
             50% { transform: translate(-50px, -150px) scale(0.8); }
             75% { transform: translate(-150px, 50px) scale(1.1); }
+        }
+
+        /* Canvas for advanced effects */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* Navigation */
@@ -106,6 +122,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -135,6 +152,44 @@
 
         .nav-links a:hover::after {
             width: 100%;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 50px;
+            height: 26px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .theme-toggle::before {
+            content: '🌙';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        body.light-mode {
+            --dark: #f1f5f9;
+            --light: #0f172a;
+        }
+
+        body.light-mode .theme-toggle::before {
+            content: '☀️';
+            left: 26px;
         }
 
         /* Hero Section */
@@ -183,6 +238,13 @@
             font-size: 24px;
             margin-bottom: 40px;
             color: #94a3b8;
+        }
+
+        .typing-text {
+            font-size: 24px;
+            margin-bottom: 40px;
+            color: var(--primary);
+            min-height: 32px;
         }
 
         .cta-button {
@@ -241,6 +303,13 @@
             transition: all 0.5s ease;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .feature-card::before {
@@ -362,6 +431,59 @@
             opacity: 1;
         }
 
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
         /* Stats Section */
         .stats {
             padding: 100px 50px;
@@ -398,6 +520,57 @@
             color: #94a3b8;
         }
 
+        /* Parallax Sections */
+        .parallax-section {
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin: 100px 0;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0.1;
+        }
+
+        .parallax-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .parallax-content h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(30, 41, 59, 0.95);
+            padding: 20px 30px;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
         /* Footer */
         footer {
             padding: 60px 50px;
@@ -423,11 +596,12 @@
             justify-content: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(99, 102, 241, 0.3);
+            cursor: pointer;
         }
 
         .social-icon:hover {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            transform: translateY(-5px);
+            transform: translateY(-5px) rotate(360deg);
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
 
@@ -442,13 +616,14 @@
             transition: width 0.1s ease;
         }
 
-        /* Smooth Scroll Indicator */
+        /* Scroll Indicator */
         .scroll-indicator {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             animation: bounce 2s infinite;
+            z-index: 100;
         }
 
         @keyframes bounce {
@@ -484,16 +659,45 @@
             100% { top: 30px; opacity: 0; }
         }
 
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 48px; }
-            .hero p { font-size: 18px; }
+            .hero p, .typing-text { font-size: 18px; }
             nav { padding: 15px 20px; }
-            .nav-links { gap: 20px; }
+            .nav-links { gap: 20px; font-size: 14px; }
             .features { padding: 50px 20px; }
+            .theme-toggle { display: none; }
         }
     </style>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
     <div class="progress-bar" id="progressBar"></div>
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
@@ -506,20 +710,21 @@
     </div>
 
     <nav id="navbar">
-        <div class="logo">NexGen</div>
+        <div class="logo" onclick="location.reload()">NexGen</div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#stats">Stats</a></li>
         </ul>
+        <div class="theme-toggle" id="themeToggle"></div>
     </nav>
 
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Welcome to the Future</h1>
-            <p>Experience the next generation of digital innovation</p>
-            <button class="cta-button">Explore Now</button>
+            <div class="typing-text" id="typingText"></div>
+            <button class="cta-button" id="ctaButton">Explore Now</button>
         </div>
         <div class="scroll-indicator">
             <span></span>
@@ -527,67 +732,75 @@
     </section>
 
     <section class="features" id="features">
-        <div class="feature-card">
+        <div class="feature-card" data-delay="0">
             <div class="feature-icon">⚡</div>
             <h3>Lightning Fast</h3>
             <p>Optimized performance that delivers incredible speed and responsiveness for the best user experience.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-delay="100">
             <div class="feature-icon">🎨</div>
             <h3>Stunning Design</h3>
             <p>Beautiful, modern aesthetics with carefully crafted animations and visual effects.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-delay="200">
             <div class="feature-icon">🔒</div>
             <h3>Secure & Reliable</h3>
             <p>Built with security in mind, ensuring your data and experience remain protected.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-delay="300">
             <div class="feature-icon">📱</div>
             <h3>Fully Responsive</h3>
             <p>Perfect experience across all devices, from desktop to mobile.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-delay="400">
             <div class="feature-icon">🚀</div>
             <h3>Next-Gen Tech</h3>
             <p>Powered by cutting-edge technology and modern web standards.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card" data-delay="500">
             <div class="feature-icon">♾️</div>
             <h3>Infinite Possibilities</h3>
             <p>Limitless customization and flexibility to match your vision.</p>
         </div>
     </section>
 
+    <div class="parallax-section">
+        <div class="parallax-bg" id="parallaxBg"></div>
+        <div class="parallax-content">
+            <h2>Innovation Meets Creativity</h2>
+            <p style="font-size: 20px; color: #94a3b8;">Where ideas come to life</p>
+        </div>
+    </div>
+
     <section class="gallery" id="gallery">
         <h2>Interactive Gallery</h2>
         <div class="gallery-grid">
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Alpha">
                 <div class="gallery-content">
                     <h4>Project Alpha</h4>
                 </div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Beta">
                 <div class="gallery-content">
                     <h4>Project Beta</h4>
                 </div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Gamma">
                 <div class="gallery-content">
                     <h4>Project Gamma</h4>
                 </div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Delta">
                 <div class="gallery-content">
                     <h4>Project Delta</h4>
                 </div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Epsilon">
                 <div class="gallery-content">
                     <h4>Project Epsilon</h4>
                 </div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-project="Zeta">
                 <div class="gallery-content">
                     <h4>Project Zeta</h4>
                 </div>
@@ -620,28 +833,176 @@
         <div class="logo" style="font-size: 36px; margin-bottom: 20px;">NexGen</div>
         <p style="color: #94a3b8; margin-bottom: 20px;">Building the future, one pixel at a time</p>
         <div class="social-links">
-            <div class="social-icon">f</div>
-            <div class="social-icon">t</div>
-            <div class="social-icon">in</div>
-            <div class="social-icon">ig</div>
+            <div class="social-icon" data-social="facebook">f</div>
+            <div class="social-icon" data-social="twitter">t</div>
+            <div class="social-icon" data-social="linkedin">in</div>
+            <div class="social-icon" data-social="instagram">ig</div>
         </div>
         <p style="color: #64748b; margin-top: 30px;">&copy; 2025 NexGen. All rights reserved.</p>
     </footer>
 
+    <div class="scroll-top" id="scrollTop">↑</div>
+
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <h2 id="modalTitle">Project Details</h2>
+            <p id="modalDescription">Click on a project to learn more about it.</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <p id="toastMessage"></p>
+    </div>
+
     <script>
-        // Custom Cursor
+        // Advanced Particle System with Canvas
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.radius = Math.random() * 2 + 1;
+                this.color = `rgba(99, 102, 241, ${Math.random() * 0.5})`;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Connect particles
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Custom Cursor with Mouse Tracking
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
-        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            setTimeout(() => {
-                follower.style.left = e.clientX + 'px';
-                follower.style.top = e.clientY + 'px';
-            }, 100);
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.3;
+            cursorY += (mouseY - cursorY) * 0.3;
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        // Cursor click effect
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('clicked');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('clicked');
+        });
+
+        // Typing Effect
+        const phrases = [
+            "Experience the next generation of digital innovation",
+            "Where creativity meets technology",
+            "Building the future, today",
+            "Elevate your digital presence"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typingText');
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+
+        typeEffect();
 
         // Scroll Progress Bar
         window.addEventListener('scroll', () => {
@@ -660,7 +1021,7 @@
             }
         });
 
-        // Animated Counter
+        // Animated Counter with Intersection Observer
         const counters = document.querySelectorAll('.stat-number');
         let animated = false;
 
@@ -692,16 +1053,38 @@
                     animated = true;
                 }
             });
-        });
+        }, { threshold: 0.5 });
 
         statsObserver.observe(document.querySelector('.stats'));
+
+        // Feature Cards Animation on Scroll
+        const featureCards = document.querySelectorAll('.feature-card');
+        const featureObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.getAttribute('data-delay');
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        featureCards.forEach(card => featureObserver.observe(card));
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const parallaxBg = document.getElementById('parallaxBg');
+            const scrolled = window.scrollY;
+            parallaxBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
 
         // Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({ behavior: 'smooth' });
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
@@ -710,10 +1093,205 @@
             const indicator = document.querySelector('.scroll-indicator');
             if (window.scrollY > 100) {
                 indicator.style.opacity = '0';
+                indicator.style.pointerEvents = 'none';
             } else {
                 indicator.style.opacity = '1';
+                indicator.style.pointerEvents = 'auto';
             }
         });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        let isDark = true;
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            document.body.classList.toggle('light-mode');
+            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled');
+        });
+
+        // Modal System
+        const modal = document.getElementById('projectModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        const projectDetails = {
+            'Alpha': 'Advanced AI-powered analytics platform with real-time data processing and machine learning capabilities.',
+            'Beta': 'Next-generation e-commerce solution featuring seamless checkout and personalized recommendations.',
+            'Gamma': 'Revolutionary content management system with intuitive drag-and-drop interface and powerful SEO tools.',
+            'Delta': 'Cutting-edge mobile application with cross-platform compatibility and offline-first architecture.',
+            'Epsilon': 'Enterprise-grade security solution with end-to-end encryption and biometric authentication.',
+            'Zeta': 'Cloud-native infrastructure platform with auto-scaling and multi-region deployment support.'
+        };
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const project = item.getAttribute('data-project');
+                modalTitle.textContent = `Project ${project}`;
+                modalDescription.textContent = projectDetails[project];
+                modal.classList.add('active');
+            });
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Toast Notification System
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        function showToast(message, duration = 3000) {
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // CTA Button with Toast
+        const ctaButton = document.getElementById('ctaButton');
+        ctaButton.addEventListener('click', () => {
+            showToast('Welcome! Explore our amazing features below 🚀');
+            document.querySelector('#features').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Social Icons with Toast
+        const socialIcons = document.querySelectorAll('.social-icon');
+        socialIcons.forEach(icon => {
+            icon.addEventListener('click', () => {
+                const platform = icon.getAttribute('data-social');
+                showToast(`Connect with us on ${platform.charAt(0).toUpperCase() + platform.slice(1)}!`);
+            });
+        });
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            // ESC to close modal
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+            
+            // Ctrl/Cmd + K for theme toggle
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                themeToggle.click();
+            }
+
+            // Arrow keys for navigation
+            if (e.key === 'ArrowUp' && window.scrollY > 100) {
+                e.preventDefault();
+                window.scrollBy({ top: -200, behavior: 'smooth' });
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                window.scrollBy({ top: 200, behavior: 'smooth' });
+            }
+        });
+
+        // Mouse Trail Effect
+        const trail = [];
+        const trailLength = 10;
+
+        document.addEventListener('mousemove', (e) => {
+            trail.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+            if (trail.length > trailLength) {
+                trail.shift();
+            }
+        });
+
+        // Easter Egg: Konami Code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                showToast('🎉 Konami Code Activated! You found the secret!', 5000);
+                document.body.style.animation = 'rainbow 2s linear infinite';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+
+        // Performance Monitoring
+        window.addEventListener('load', () => {
+            const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+            console.log(`⚡ Page loaded in ${loadTime}ms`);
+            
+            if (loadTime < 1000) {
+                console.log('🚀 Lightning fast performance!');
+            }
+        });
+
+        // Lazy Loading Images (if you add images later)
+        const lazyLoad = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    observer.unobserve(img);
+                }
+            });
+        };
+
+        const imgObserver = new IntersectionObserver(lazyLoad);
+
+        // FPS Counter (for debugging)
+        let fps = 0;
+        let lastTime = performance.now();
+        
+        function calculateFPS() {
+            const currentTime = performance.now();
+            fps = Math.round(1000 / (currentTime - lastTime));
+            lastTime = currentTime;
+            requestAnimationFrame(calculateFPS);
+        }
+        
+        calculateFPS();
+
+        // Console Welcome Message
+        console.log('%c🚀 NexGen Website', 'font-size: 20px; font-weight: bold; color: #6366f1;');
+        console.log('%cBuilt with ❤️ and modern JavaScript', 'font-size: 14px; color: #94a3b8;');
+        console.log('%cTry Ctrl/Cmd + K to toggle theme!', 'font-size: 12px; color: #ec4899;');
+
+        // Add rainbow animation for easter egg
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rainbow {
+                0% { filter: hue-rotate(0deg); }
+                100% { filter: hue-rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
